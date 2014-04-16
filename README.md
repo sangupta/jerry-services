@@ -18,6 +18,12 @@ The library can be downloaded from Maven Central using:
 </dependency>
 ```
 
+Authors
+-------
+
+* Sandeep Gupta
+* Purnima Singhania 
+
 Versioning
 ----------
 
@@ -40,7 +46,7 @@ For more information on SemVer, please visit http://semver.org/.
 License
 -------
 	
-Copyright (c) 2012, Sandeep Gupta
+Copyright (c) 2012-2014, Sandeep Gupta
 
 The project uses various other libraries that are subject to their
 own license terms. See the distribution libraries or the project
