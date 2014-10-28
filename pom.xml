@@ -11,7 +11,7 @@
 
 	<groupId>com.sangupta</groupId>
 	<artifactId>jerry-services</artifactId>
-	<version>0.3.0</version>
+	<version>0.3.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	
 	<name>Jerry Services project</name>
