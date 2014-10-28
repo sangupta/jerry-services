@@ -38,6 +38,12 @@
             <name>Purnima singhania</name>
             <email>purnimasinghania@gmail.com</email>
         </developer>
+        <developer>
+        	<id>sangupta</id>
+        	<name>Sandeep Gupta</name>
+        	<email>sandy.pec@gmail.com</email>
+        	<url>http://sangupta.com</url>
+        </developer>
 	</developers>
 
 	<properties>
@@ -60,6 +66,12 @@
             <version>2.2.1</version>
             <scope>provided</scope>
         </dependency>
+        
+        <dependency>
+        	<groupId>com.sangupta</groupId>
+        	<artifactId>jerry-core</artifactId>
+        	<version>1.2.2-SNAPSHOT</version>
+        </dependency>
 
         <dependency>
             <groupId>com.thoughtworks.xstream</groupId>
@@ -80,11 +92,13 @@
             <version>3.2.3.RELEASE</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.sangupta</groupId>
-            <artifactId>jerry-core</artifactId>
-            <version>0.9.0</version>
+		<dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+            <version>1.6.0.RELEASE</version>
+            <scope>provided</scope>
         </dependency>
+        
 	</dependencies>
 
 	<build>
