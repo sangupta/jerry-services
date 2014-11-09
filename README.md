@@ -1,9 +1,23 @@
 jerry-services
-==========
+==============
 
 Common services required throughout applications like Configuration Service, Scheduler Service
 
 For more information on the project, refer to https://github.com/sangupta/jerry project.
+
+Release Notes
+-------------
+
+**Current Development**
+
+**0.3.0**
+
+* Configuration service
+* Counter service
+* Database CRUD operations service
+* Email service
+* MongoDB operation service
+* Quartz service
 
 Downloads
 ---------
@@ -14,7 +28,7 @@ The library can be downloaded from Maven Central using:
 <dependency>
     <groupId>com.sangupta</groupId>
     <artifactId>jerry-services</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.3.0</version>
 </dependency>
 ```
 
@@ -46,6 +60,7 @@ For more information on SemVer, please visit http://semver.org/.
 License
 -------
 	
+```
 Copyright (c) 2012-2014, Sandeep Gupta
 
 The project uses various other libraries that are subject to their
@@ -63,3 +78,4 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+```
