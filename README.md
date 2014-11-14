@@ -43,11 +43,10 @@ Versioning
 
 For transparency and insight into our release cycle, and for striving to maintain backward compatibility, 
 `jerry-services` will be maintained under the Semantic Versioning guidelines as much as possible.
-`jerry-services` will be maintained under the Semantic Versioning guidelines as much as possible.
 
 Releases will be numbered with the follow format:
 
-`<major>.<minor>.<patch>`
+	<major>.<minor>.<patch>
 
 And constructed with the following guidelines:
 
@@ -61,7 +60,10 @@ License
 -------
 	
 ```
+jerry-services - Common Java Services
 Copyright (c) 2012-2014, Sandeep Gupta
+
+	http://sangupta.com/projects/jerry-services
 
 The project uses various other libraries that are subject to their
 own license terms. See the distribution libraries or the project
