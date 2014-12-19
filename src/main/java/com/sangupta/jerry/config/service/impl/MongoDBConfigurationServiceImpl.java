@@ -21,25 +21,23 @@
 
 package com.sangupta.jerry.config.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 import com.sangupta.jerry.config.domain.Configuration;
-import com.sangupta.jerry.config.service.ConfigurationService;
 import com.sangupta.jerry.util.AssertUtils;
 
 /**
- * A {@link ConfigurationService} implementation that keeps all data in-memory.
- * The configuration is lost when the JVM is shutdown.
  * 
  * @author sangupta
  *
  */
-public class InMemoryConfigurationServiceImpl extends BaseConfigurationServiceImpl {
+public class MongoDBConfigurationServiceImpl extends BaseConfigurationServiceImpl {
 	
-	private static final ConcurrentMap<String, Configuration> CONFIG_MAP = new ConcurrentHashMap<String, Configuration>();
+	@Autowired
+	private MongoTemplate mongoTemplate;
 
 	@Override
 	public boolean create(Configuration configuration) {
@@ -47,16 +45,8 @@ public class InMemoryConfigurationServiceImpl extends BaseConfigurationServiceIm
 			throw new IllegalArgumentException("Configuration object cannot be null");
 		}
 		
-		if(AssertUtils.isEmpty(configuration.getConfigKey())) {
-			throw new IllegalArgumentException("Configuration key cannot be null/empty");
-		}
-		
-		Configuration older = CONFIG_MAP.putIfAbsent(configuration.getConfigKey(), configuration);
-		if(older == null) {
-			return true;
-		}
-		
-		return false;
+		this.mongoTemplate.insert(configuration);
+		return true;
 	}
 
 	@Override
@@ -65,7 +55,7 @@ public class InMemoryConfigurationServiceImpl extends BaseConfigurationServiceIm
 			throw new IllegalArgumentException("Configuration key cannot be null/empty");
 		}
 		
-		return CONFIG_MAP.get(key);
+		return this.mongoTemplate.findById(key, Configuration.class);
 	}
 
 	@Override
@@ -85,6 +75,8 @@ public class InMemoryConfigurationServiceImpl extends BaseConfigurationServiceIm
 		
 		current.setValue(value);
 		current.setReadOnly(readOnly);
+		this.mongoTemplate.save(current);
+		
 		return true;
 	}
 
@@ -94,17 +86,18 @@ public class InMemoryConfigurationServiceImpl extends BaseConfigurationServiceIm
 			throw new IllegalArgumentException("Configuration key cannot be null/empty");
 		}
 		
-		Configuration config = CONFIG_MAP.remove(key);
-		if(config != null) {
-			return true;
+		Configuration config = this.get(key);
+		if(config == null) {
+			return false;
 		}
 		
-		return false;
+		this.mongoTemplate.remove(config);
+		return true;
 	}
 
 	@Override
 	public List<Configuration> getAllConfigurations() {
-		return new ArrayList<Configuration>(CONFIG_MAP.values());
+		return this.mongoTemplate.findAll(Configuration.class);
 	}
 
 }

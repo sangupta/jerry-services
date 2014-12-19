@@ -44,6 +44,8 @@ public interface ConfigurationService {
 	
 	public boolean update(String key, String value);
 	
+	public boolean update(String key, String value, boolean readOnly);
+	
 	public boolean delete(Configuration configuration);
 	
 	public boolean delete(String key);

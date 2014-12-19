@@ -21,7 +21,9 @@
 
 package com.sangupta.jerry.config.service.impl;
 
+import com.sangupta.jerry.config.domain.Configuration;
 import com.sangupta.jerry.config.service.ConfigurationService;
+import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.jerry.util.StringUtils;
 
 /**
@@ -32,6 +34,45 @@ import com.sangupta.jerry.util.StringUtils;
  */
 public abstract class BaseConfigurationServiceImpl implements ConfigurationService {
 
+	public boolean create(String key, String value) {
+		if(AssertUtils.isEmpty(key)) {
+			throw new IllegalArgumentException("Configuration key cannot be null/empty");
+		}
+		
+		return create(new Configuration(key, value));
+	}
+
+	public boolean delete(Configuration configuration) {
+		if(configuration == null) {
+			throw new IllegalArgumentException("Configuration object cannot be null");
+		}
+		
+		return this.delete(configuration.getConfigKey());
+	}
+
+	public String getValue(String key) {
+		Configuration configuration = this.get(key);
+		if(configuration == null) {
+			return null;
+		}
+		
+		return configuration.getValue();
+	}
+
+	@Override
+	public boolean update(String key, String value) {
+		return this.update(key, value, false);
+	}
+
+	@Override
+	public boolean update(Configuration configuration) {
+		if(configuration == null) {
+			throw new IllegalArgumentException("Configuration object cannot be null");
+		}
+		
+		return this.update(configuration.getConfigKey(), configuration.getValue(), configuration.isReadOnly());
+	}
+	
 	public short getShortValue(String key, short defaultValue) {
 		return StringUtils.getShortValue(getValue(key), defaultValue);
 	}
