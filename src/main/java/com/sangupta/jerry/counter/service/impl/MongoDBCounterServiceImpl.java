@@ -79,7 +79,7 @@ public class MongoDBCounterServiceImpl implements CounterService {
 	}
 
 	@Override
-	public boolean increment(String name) {
+	public long increment(String name) {
 		if(AssertUtils.isEmpty(name)) {
 			throw new IllegalArgumentException("Counter name cannot be empty/null");
 		}
@@ -88,14 +88,14 @@ public class MongoDBCounterServiceImpl implements CounterService {
 		update.inc("value", 1);
 		MongoCounter counter = this.mongoTemplate.findAndModify(new Query(Criteria.where("counterName").is(name)), update, MongoCounter.class);
 		if(counter != null) {
-			return true;
+			return counter.getValue(); 
 		}
 		
-		return false;
+		return 0l;
 	}
 
 	@Override
-	public boolean decrement(String name) {
+	public long decrement(String name) {
 		if(AssertUtils.isEmpty(name)) {
 			throw new IllegalArgumentException("Counter name cannot be empty/null");
 		}
@@ -104,10 +104,10 @@ public class MongoDBCounterServiceImpl implements CounterService {
 		update.inc("value", -1);
 		MongoCounter counter = this.mongoTemplate.findAndModify(new Query(Criteria.where("counterName").is(name)), update, MongoCounter.class);
 		if(counter != null) {
-			return true;
+			return counter.getValue();
 		}
 		
-		return false;
+		return 0l;
 	}
 
 	@Override

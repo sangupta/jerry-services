@@ -53,15 +53,13 @@ public class InMemoryCounterServiceImpl implements CounterService {
 	}
 
 	@Override
-	public boolean increment(String name) {
-		counter.increment(name);
-		return true;
+	public long increment(String name) {
+		return counter.increment(name);
 	}
 
 	@Override
-	public boolean decrement(String name) {
-		counter.decrement(name);
-		return true;
+	public long decrement(String name) {
+		return counter.decrement(name);
 	}
 
 	@Override

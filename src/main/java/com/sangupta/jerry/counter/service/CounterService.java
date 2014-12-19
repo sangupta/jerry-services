@@ -72,7 +72,7 @@ public interface CounterService {
 	 * @return <code>true</code> if counter was found and successfully
 	 *         incremented, <code>false</code> otherwise
 	 */
-	public boolean increment(String name);
+	public long increment(String name);
 	
 	/**
 	 * Decrement the value of the counter with the given name by <code>-1</code>
@@ -83,7 +83,7 @@ public interface CounterService {
 	 * @return <code>true</code> if counter was found and successfully
 	 *         decremented, <code>false</code> otherwise
 	 */
-	public boolean decrement(String name);
+	public long decrement(String name);
 
 	/**
 	 * Set the current value of the counter to given value
