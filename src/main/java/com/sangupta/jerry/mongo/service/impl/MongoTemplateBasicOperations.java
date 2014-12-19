@@ -19,7 +19,7 @@
  * 
  */
 
-package com.sangupta.jerry.mongodb.service.impl;
+package com.sangupta.jerry.mongo.service.impl;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
