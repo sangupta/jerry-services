@@ -66,7 +66,7 @@ import com.sangupta.jerry.util.AssertUtils;
  * @author sangupta
  *
  */
-public abstract class MongoTemplateBasicOperations<T, X> implements DatabaseBasicOperationsService<T, X> {
+public abstract class MongoDBBasicOperations<T, X> implements DatabaseBasicOperationsService<T, X> {
 	
 	protected MappingContext<? extends MongoPersistentEntity<?>, MongoPersistentProperty> mappingContext = null;
 	
@@ -89,7 +89,7 @@ public abstract class MongoTemplateBasicOperations<T, X> implements DatabaseBasi
 	 * Default constructor that goes ahead and infers the entity class via
 	 * generics - it will be needed with {@link MongoTemplate} while working.
 	 */
-	public MongoTemplateBasicOperations() {
+	public MongoDBBasicOperations() {
 		inferEntityClassViaGenerics();
 	}
 	

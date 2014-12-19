@@ -37,7 +37,7 @@ import com.sangupta.jerry.util.AssertUtils;
  * @author sangupta
  *
  */
-public class MongoTemplateCounterServiceImpl implements CounterService {
+public class MongoDBCounterServiceImpl implements CounterService {
 	
 	@Autowired
 	private MongoTemplate mongoTemplate;
