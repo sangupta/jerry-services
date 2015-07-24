@@ -22,7 +22,7 @@
 package com.sangupta.jerry.counter.service.impl;
 
 import com.sangupta.jerry.counter.service.CounterService;
-import com.sangupta.jerry.ds.LongCounter;
+import com.sangupta.jerry.ds.counter.LongCounter;
 
 /**
  * Implementation of {@link CounterService} that uses in-memory based counters
