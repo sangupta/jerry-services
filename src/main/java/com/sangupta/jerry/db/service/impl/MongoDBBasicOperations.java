@@ -305,7 +305,8 @@ public abstract class MongoDBBasicOperations<T, X> implements DatabaseBasicOpera
 			return null;
 		}
 		
-		X idValue = BeanWrapper.create(entity, conversionService).getProperty(idProperty, this.primaryIDClass);
+//		X idValue = BeanWrapper.create(entity, conversionService).getProperty(idProperty, this.primaryIDClass);
+		X idValue = (X) this.mappingContext.getPersistentEntity(this.entityClass).getPropertyAccessor(entity).getProperty(idProperty);
 		return idValue;
 	}
 	
