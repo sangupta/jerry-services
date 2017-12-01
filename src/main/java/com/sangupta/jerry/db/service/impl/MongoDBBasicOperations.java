@@ -30,7 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.mapping.context.MappingContext;
-import org.springframework.data.mapping.model.BeanWrapper;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MongoConverter;
 import org.springframework.data.mongodb.core.mapping.MongoPersistentEntity;
@@ -182,8 +181,14 @@ public abstract class MongoDBBasicOperations<T, X> implements DatabaseBasicOpera
 				return false;
 			}
 		}
+
+		try {
+		    this.mongoTemplate.insert(entity);
+		} catch(RuntimeException e) {
+		    // this ensures that any insert operation that fails returns a false
+		    return false;
+		}
 		
-		this.mongoTemplate.insert(entity);
 		return true;
 	}
 
