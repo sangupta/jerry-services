@@ -49,9 +49,10 @@ public class DefaultQuartzServiceImpl implements QuartzService {
     private Scheduler scheduler;
 
     /**
-     * @return
-     * @see QuartzService#getJobs()
-     */
+	 * @return a {@link List} of all {@link QuartzJobInfo} objects available
+	 * 
+	 * @see QuartzService#getJobs()
+	 */
     public List<QuartzJobInfo> getJobs() {
         List<QuartzJobInfo> jobs = new ArrayList<QuartzJobInfo>();
         try {
@@ -113,11 +114,18 @@ public class DefaultQuartzServiceImpl implements QuartzService {
     }
 
     /**
-     * @param jobName
-     * @param jobGroupName
-     * @return
-     * @see QuartzService#pauseQuartzJob(String, String)
-     */
+	 * Pause the job with given name in given group
+	 * 
+	 * @param jobName
+	 *            the job name
+	 * 
+	 * @param jobGroupName
+	 *            the job group name
+	 * 
+	 * @return <code>true</code> if job was paused, <code>false</code> otherwise
+	 * 
+	 * @see QuartzService#pauseQuartzJob(String, String)
+	 */
     public boolean pauseQuartzJob(String jobName, String jobGroupName) {
         try {
             this.scheduler.pauseJob(new JobKey(jobName, jobGroupName));
@@ -140,9 +148,12 @@ public class DefaultQuartzServiceImpl implements QuartzService {
 
 
     /**
-     * @return
-     * @see QuartzService#pauseQuartzScheduler()
-     */
+	 * Pause the Quartz scheduler.
+	 * 
+	 * @return <code>true</code> if paused, <code>false</code> otherwise
+	 * 
+	 * @see QuartzService#pauseQuartzScheduler()
+	 */
     public boolean pauseQuartzScheduler() {
         try {
             this.scheduler.standby();
@@ -154,9 +165,13 @@ public class DefaultQuartzServiceImpl implements QuartzService {
     }
 
     /**
-     * @return
-     * @see QuartzService#isSchedulerPaused()
-     */
+	 * Check if scheduler is paused, or not.
+	 * 
+	 * @return {@link Boolean} <code>true</code> if paused, <code>false</code>
+	 *         otherwise, or <code>null</code> if we cannot fetch state
+	 * 
+	 * @see QuartzService#isSchedulerPaused()
+	 */
     public Boolean isSchedulerPaused() {
         try {
             return this.scheduler.isInStandbyMode();
@@ -167,11 +182,18 @@ public class DefaultQuartzServiceImpl implements QuartzService {
     }
 
     /**
-     * @param jobName
-     * @param jobGroupName
-     * @return
-     * @see QuartzService#executeJob(String, String)
-     */
+	 * Fire the given job in given group.
+	 * 
+	 * @param jobName
+	 *            the name of the job
+	 * 
+	 * @param jobGroupName
+	 *            the group name of the job
+	 * 
+	 * @return <code>true</code> if job was fired, <code>false</code> otherwise
+	 * 
+	 * @see QuartzService#executeJob(String, String)
+	 */
     public boolean executeJob(String jobName, String jobGroupName) {
         try {
             this.scheduler.triggerJob(new JobKey(jobName, jobGroupName));

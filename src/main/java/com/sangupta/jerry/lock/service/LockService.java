@@ -34,7 +34,7 @@ public interface LockService {
 	 * @param lockName
 	 *            the name of the lock to obtain
 	 * 
-	 * @param timeout
+	 * @param timeoutInMillis
 	 *            the timeout in milliseconds
 	 * 
 	 * @return <code>true</code> if lock was obtained, <code>false</code> otherwise

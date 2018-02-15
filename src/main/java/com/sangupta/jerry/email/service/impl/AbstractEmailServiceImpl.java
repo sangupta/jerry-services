@@ -28,16 +28,13 @@ import com.sangupta.jerry.email.service.EmailService;
 /**
  * An abstract implementation that completes the many utility methods
  * of the {@link EmailService} so that concrete implementations can focus
- * purely on sending the email, by a single method, {@link EmailService#sendEmail(com.boogle.email.domain.Email)}.
+ * purely on sending the email, by a single method, {@link EmailService#sendEmail(Email)}
  * 
  * @author sangupta
  *
  */
 public abstract class AbstractEmailServiceImpl implements EmailService {
 
-	/**
-	 * @see com.boogle.email.service.EmailService#sendEmail(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public boolean sendEmail(String fromAddress, String toAddress, String subject, String text) {
 		Email email = new Email();
@@ -49,9 +46,6 @@ public abstract class AbstractEmailServiceImpl implements EmailService {
 		return sendEmail(email);
 	}
 
-	/**
-	 * @see com.boogle.email.service.EmailService#sendEmail(com.boogle.email.domain.EmailAddress, com.boogle.email.domain.EmailAddress, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public boolean sendEmail(EmailAddress fromAddress, EmailAddress toAddress, String subject, String text) {
 		Email email = new Email();
@@ -67,7 +61,9 @@ public abstract class AbstractEmailServiceImpl implements EmailService {
 	 * Method to validate the provided email object for mandatory parameters.
 	 * 
 	 * @param email
-	 * @return
+	 *            the {@link Email} instance to validate
+	 * 
+	 * @return <code>true</code> if valid, <code>false</code> otherwise.
 	 */
 	protected boolean validateEmail(Email email) {
 		return true;

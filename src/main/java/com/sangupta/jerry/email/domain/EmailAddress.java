@@ -130,7 +130,7 @@ public class EmailAddress {
 	}
 
 	/**
-	 * @return
+	 * @return the {@link Address} linked to this
 	 */
 	public Address getInternetAddress() {
 		try {
@@ -141,12 +141,14 @@ public class EmailAddress {
 	}
 
 	/**
-	 * Parse a string that contains multiple email addresses and return a {@link Set}
-	 * of {@link EmailAddress} objects that can then be set to various properties
-	 * of {@link Email} object.
+	 * Parse a string that contains multiple email addresses and return a
+	 * {@link Set} of {@link EmailAddress} objects that can then be set to various
+	 * properties of {@link Email} object.
 	 * 
 	 * @param email
-	 * @return
+	 *            the email string
+	 * 
+	 * @return a {@link Set} of {@link EmailAddress} objects
 	 */
 	public static Set<EmailAddress> parseMultiple(String email) {
 		if(AssertUtils.isEmpty(email)) {
