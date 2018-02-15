@@ -101,7 +101,7 @@ public class Email {
 	}
 	
 	/**
-	 * @param emailAddress
+	 * @param emailAddress the {@link EmailAddress} to add
 	 */
 	public void addReplyTo(EmailAddress emailAddress) {
 		if(this.replyTo == null) {
