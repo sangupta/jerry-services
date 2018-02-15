@@ -29,12 +29,15 @@ package com.sangupta.jerry.lock.service;
 public interface LockService {
 
 	/**
-	 * Obtain a new lock with the given name in Redis and the given timeout
-	 * value.
+	 * Obtain a new lock with the given name in Redis and the given timeout value.
 	 * 
 	 * @param lockName
+	 *            the name of the lock to obtain
+	 * 
 	 * @param timeout
-	 * @return
+	 *            the timeout in milliseconds
+	 * 
+	 * @return <code>true</code> if lock was obtained, <code>false</code> otherwise
 	 */
 	public boolean obtainLock(String lockName, long timeoutInMillis);
 	
@@ -42,27 +45,35 @@ public interface LockService {
 	 * Check if the lock is expired.
 	 * 
 	 * @param lockName
-	 * @return
+	 *            the name of the lock to check
+	 * 
+	 * @return <code>true</code> if lock has expired, <code>false</code> otherwise
 	 */
 	public boolean isLockExpired(String lockName);
 	
 	/**
-	 * Obtain an expired lock. This implementation should check if the lock
-	 * is already expired, and then fire a GETSET command.
+	 * Obtain an expired lock. This implementation should check if the lock is
+	 * already expired, and then fire a GETSET command.
 	 * 
 	 * @param lockName
+	 *            the name of the lock to acquire
+	 * 
 	 * @param timeoutInMillis
-	 * @return
+	 *            the timeout in milliseconds
+	 * 
+	 * @return <code>true</code> if lock was obtained, <code>false</code> otherwise
 	 */
 	public boolean obtainExpiredLock(String lockName, long timeoutInMillis);
 	
 	/**
-	 * Release the lock if we obtained the lock ourself. The lock expiration
-	 * time must be checked along with the fact that it was this node that
-	 * obtained the lock.
+	 * Release the lock if we obtained the lock ourself. The lock expiration time
+	 * must be checked along with the fact that it was this node that obtained the
+	 * lock.
 	 * 
 	 * @param lockName
-	 * @return
+	 *            the name of the lock to release
+	 * 
+	 * @return <code>true</code> if lock was released, <code>false</code> otherwise
 	 */
 	public boolean releaseLockIfHeld(String lockName);
 	
@@ -70,7 +81,9 @@ public interface LockService {
 	 * Return the current value of the lock as the complete {@link String}.
 	 * 
 	 * @param lockName
-	 * @return
+	 *            the name of the lock to fetch
+	 * 
+	 * @return the value of the lock if available, <code>null</code> otherwise
 	 */
 	public String getLockValue(String lockName);
 

@@ -96,7 +96,9 @@ public abstract class MongoDBBasicOperations<T, X> implements DatabaseBasicOpera
 	 * Return the object as defined by this primary key.
 	 * 
 	 * @param primaryID
-	 * @return
+	 *            the primary key for record
+	 * 
+	 * @return the record if available, <code>null</code> otherwise
 	 */
 	@Override
 	public T get(X primaryID) {
@@ -109,7 +111,12 @@ public abstract class MongoDBBasicOperations<T, X> implements DatabaseBasicOpera
 	}
 
 	/**
+	 * Get all records for the given {@link Collection} of primary keys.
 	 * 
+	 * @param ids
+	 *            the {@link Collection} of keys
+	 * 
+	 * @return a {@link List} of available records
 	 */
 	@Override
 	public List<T> getForIdentifiers(Collection<X> ids) {
@@ -125,9 +132,6 @@ public abstract class MongoDBBasicOperations<T, X> implements DatabaseBasicOpera
 		return this.mongoTemplate.find(query, this.entityClass);
 	}
 	
-	/**
-	 * 
-	 */
 	@Override
 	public List<T> getForIdentifiers(X... ids) {
 		if(AssertUtils.isEmpty(ids)) {
@@ -142,17 +146,11 @@ public abstract class MongoDBBasicOperations<T, X> implements DatabaseBasicOpera
 		return this.mongoTemplate.find(query, this.entityClass);
 	}
 	
-	/**
-	 * 
-	 */
 	@Override
 	public List<T> getAllEntities() {
 		return this.mongoTemplate.findAll(this.entityClass);
 	}
 	
-	/**
-	 * 
-	 */
 	@Override
 	public List<T> getEntities(int page, int pageSize) {
 		Query query = new Query();
@@ -164,10 +162,12 @@ public abstract class MongoDBBasicOperations<T, X> implements DatabaseBasicOpera
 	}
 	
 	/**
-	 * Insert the object into the data store. 
+	 * Insert the object into the data store.
 	 * 
 	 * @param entity
-	 * @return
+	 *            the entity to insert
+	 * 
+	 * @return <code>true</code> if inserted, <code>false</code> otherwise
 	 */
 	@Override
 	public boolean insert(T entity) {
@@ -196,7 +196,9 @@ public abstract class MongoDBBasicOperations<T, X> implements DatabaseBasicOpera
 	 * Update the entity in the data store.
 	 * 
 	 * @param entity
-	 * @return
+	 *            the entity to update
+	 * 
+	 * @return <code>true</code> if updated, <code>false</code> otherwise
 	 */
 	@Override
 	public boolean update(T entity) {
@@ -221,7 +223,9 @@ public abstract class MongoDBBasicOperations<T, X> implements DatabaseBasicOpera
 	 * Add or update an existing object in the data store.
 	 * 
 	 * @param object
-	 * @return
+	 *            the object to save
+	 * 
+	 * @return <code>true</code> if saved, <code>false</code> otherwise
 	 */
 	@Override
 	public boolean addOrUpdate(T object) {
@@ -244,9 +248,12 @@ public abstract class MongoDBBasicOperations<T, X> implements DatabaseBasicOpera
 	}
 	
 	/**
-	 * Delete 
+	 * Delete the object against the given primary key.
+	 * 
 	 * @param primaryID
-	 * @return
+	 *            the primary key
+	 * 
+	 * @return the record that was removed
 	 */
 	@Override
 	public T delete(X primaryID) {
@@ -266,7 +273,7 @@ public abstract class MongoDBBasicOperations<T, X> implements DatabaseBasicOpera
 	/**
 	 * Count the total number of objects in the collection
 	 * 
-	 * @return
+	 * @return the total number of objects
 	 */
 	@Override
 	public long count() {
@@ -284,10 +291,10 @@ public abstract class MongoDBBasicOperations<T, X> implements DatabaseBasicOpera
 	}
 	
 	/**
-	 * Defines if we need to allow empty or zero value in primary ID
-	 * of the entity object.
+	 * Defines if we need to allow empty or zero value in primary ID of the entity
+	 * object.
 	 * 
-	 * @return
+	 * @return returns <code>false</code> for default implementations
 	 */
 	public boolean allowEmptyOrZeroID() {
 		return false;
@@ -297,7 +304,9 @@ public abstract class MongoDBBasicOperations<T, X> implements DatabaseBasicOpera
 	 * Extract the value of the primary ID of the entity object
 	 * 
 	 * @param entity
-	 * @return
+	 *            the entity to get primary key value of
+	 * 
+	 * @return the primary key value
 	 */
 	public X getPrimaryID(T entity) {
 		if(mappingContext == null || conversionService == null) {

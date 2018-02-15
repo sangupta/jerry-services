@@ -42,10 +42,12 @@ public class MongoDBUtils {
 	 * Returns the MongoDB statistics for the given database.
 	 * 
 	 * @param mongoDatabase
+	 *            the {@link DB} to get statistics from
 	 * 
-	 * @return
+	 * @return the {@link MongoDBStats}
 	 * 
-	 * @throws NullPointerException if database instance provided is <code>null</code>.
+	 * @throws NullPointerException
+	 *             if database instance provided is <code>null</code>.
 	 */
 	public static MongoDBStats getDatabaseStatistics(DB mongoDatabase) {
 		CommandResult commandResult = mongoDatabase.getStats();
@@ -54,13 +56,16 @@ public class MongoDBUtils {
 	}
 	
 	/**
-	 * Returns the MongoDB statistics for the database in use by this {@link MongoTemplate}.
+	 * Returns the MongoDB statistics for the database in use by this
+	 * {@link MongoTemplate}.
 	 * 
 	 * @param template
+	 *            the {@link MongoTemplate} to use
 	 * 
-	 * @return
+	 * @return the {@link MongoDBStats}
 	 * 
-	 * @throws NullPointerException if template instance provided is <code>null</code>.
+	 * @throws NullPointerException
+	 *             if template instance provided is <code>null</code>.
 	 */
 	public static MongoDBStats getDatabaseStatistics(MongoTemplate template) {
 		return getDatabaseStatistics(template.getDb());

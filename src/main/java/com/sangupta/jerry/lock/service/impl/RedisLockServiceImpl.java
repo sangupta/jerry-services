@@ -134,7 +134,9 @@ public class RedisLockServiceImpl implements LockService {
 	 * Return the key name for the distributed lock.
 	 * 
 	 * @param lockName
-	 * @return
+	 *            the lock name to use
+	 *            
+	 * @return the generated key name
 	 */
 	protected String getKeyName(String lockName) {
 		return "distributedLock::" + lockName;
@@ -144,7 +146,9 @@ public class RedisLockServiceImpl implements LockService {
 	 * Return the new value for the lock for given timeout.
 	 * 
 	 * @param timeoutInMillis
-	 * @return
+	 *            timeout in milli-seconds
+	 * 
+	 * @return the new lock value
 	 */
 	protected String getNewLockValue(long timeoutInMillis) {
 		long time = System.currentTimeMillis() + timeoutInMillis + 1l;

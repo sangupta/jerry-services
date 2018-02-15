@@ -57,7 +57,10 @@ public class Configuration {
 	 * Convenience constructor
 	 * 
 	 * @param key
+	 *            the configuration key to use
+	 * 
 	 * @param value
+	 *            the configuration value to use
 	 */
 	public Configuration(String key, String value) {
 		this.configKey = key;
