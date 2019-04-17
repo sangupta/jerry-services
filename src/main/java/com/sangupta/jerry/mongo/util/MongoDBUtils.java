@@ -25,6 +25,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 
 import com.mongodb.CommandResult;
 import com.mongodb.DB;
+import com.mongodb.client.MongoDatabase;
 import com.sangupta.jerry.mongo.domain.MongoDBStats;
 import com.sangupta.jerry.util.GsonUtils;
 
@@ -49,10 +50,12 @@ public class MongoDBUtils {
 	 * @throws NullPointerException
 	 *             if database instance provided is <code>null</code>.
 	 */
-	public static MongoDBStats getDatabaseStatistics(DB mongoDatabase) {
-		CommandResult commandResult = mongoDatabase.getStats();
-		MongoDBStats stats = GsonUtils.getGson().fromJson(commandResult.toString(), MongoDBStats.class);
-		return stats;
+	public static MongoDBStats getDatabaseStatistics(MongoDatabase mongoDatabase) {
+//		CommandResult commandResult = mongoDatabase.getStats();
+//		MongoDBStats stats = GsonUtils.getGson().fromJson(commandResult.toString(), MongoDBStats.class);
+//		return stats;
+		
+		return null;
 	}
 	
 	/**

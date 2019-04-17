@@ -30,6 +30,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 
 import com.mongodb.DB;
 import com.mongodb.Mongo;
+import com.mongodb.client.MongoDatabase;
 
 /**
  * {@link ApplicationListener} of Spring framework that allows for closing of MongoDB
@@ -39,61 +40,67 @@ import com.mongodb.Mongo;
  *
  */
 public class SpringMongoClosingListener implements ApplicationListener<ContextClosedEvent> {
-	
-	@Autowired
-	private MongoTemplate mongoTemplate;
-	
-	private Mongo mongo;
-	
-	/**
-	 * Initialize method that gets the instance of MongoDB that needs
-	 * to be closed.
-	 * 
-	 */
-	@PostConstruct
-	public void init() {
-		DB mongoDB = this.mongoTemplate.getDb();
-		this.mongo = mongoDB.getMongo();
-		
-		// add a JVM shutdown hook
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			
-			@Override
-			public void run() {
-				if(mongo != null) {
-					mongo.close();
-					mongo = null;
-				}
-			}
-			
-		});
-	}
 
-	/**
-	 * @see org.springframework.context.ApplicationListener#onApplicationEvent(org.springframework.context.ApplicationEvent)
-	 */
 	@Override
 	public void onApplicationEvent(ContextClosedEvent event) {
-		if(this.mongo != null) {
-			this.mongo.close();
-			this.mongo = null;
-		}
+		// TODO Auto-generated method stub
+		
 	}
 	
-	// Usual accessors follow
-
-	/**
-	 * @return the mongoTemplate
-	 */
-	public MongoTemplate getMongoTemplate() {
-		return mongoTemplate;
-	}
-
-	/**
-	 * @param mongoTemplate the mongoTemplate to set
-	 */
-	public void setMongoTemplate(MongoTemplate mongoTemplate) {
-		this.mongoTemplate = mongoTemplate;
-	}
+//	@Autowired
+//	private MongoTemplate mongoTemplate;
+//	
+//	private Mongo mongo;
+//	
+//	/**
+//	 * Initialize method that gets the instance of MongoDB that needs
+//	 * to be closed.
+//	 * 
+//	 */
+//	@PostConstruct
+//	public void init() {
+//		MongoDatabase mongoDB = this.mongoTemplate.getDb();
+//		this.mongo = mongoDB.
+//		
+//		// add a JVM shutdown hook
+//		Runtime.getRuntime().addShutdownHook(new Thread() {
+//			
+//			@Override
+//			public void run() {
+//				if(mongo != null) {
+//					mongo.close();
+//					mongo = null;
+//				}
+//			}
+//			
+//		});
+//	}
+//
+//	/**
+//	 * @see org.springframework.context.ApplicationListener#onApplicationEvent(org.springframework.context.ApplicationEvent)
+//	 */
+//	@Override
+//	public void onApplicationEvent(ContextClosedEvent event) {
+//		if(this.mongo != null) {
+//			this.mongo.close();
+//			this.mongo = null;
+//		}
+//	}
+//	
+//	// Usual accessors follow
+//
+//	/**
+//	 * @return the mongoTemplate
+//	 */
+//	public MongoTemplate getMongoTemplate() {
+//		return mongoTemplate;
+//	}
+//
+//	/**
+//	 * @param mongoTemplate the mongoTemplate to set
+//	 */
+//	public void setMongoTemplate(MongoTemplate mongoTemplate) {
+//		this.mongoTemplate = mongoTemplate;
+//	}
 
 }
