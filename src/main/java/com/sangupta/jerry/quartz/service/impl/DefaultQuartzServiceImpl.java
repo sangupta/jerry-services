@@ -30,7 +30,6 @@ import org.apache.commons.logging.LogFactory;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -252,7 +251,6 @@ public class DefaultQuartzServiceImpl implements QuartzService {
      *
      * @param scheduler scheduler to set.
      */
-    @Required
     public void setScheduler(Scheduler scheduler) {
         this.scheduler = scheduler;
     }
