@@ -21,13 +21,13 @@
 
 package com.sangupta.jerry.email.service.impl;
 
+import javax.inject.Inject;
 import javax.mail.Address;
 import javax.mail.Message.RecipientType;
 import javax.mail.internet.MimeMessage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -45,7 +45,7 @@ public class SmtpEmailServiceImpl extends AbstractEmailServiceImpl implements Em
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(SmtpEmailServiceImpl.class);
 	
-	@Autowired
+	@Inject
 	protected JavaMailSender mailSender;
 
 	/**

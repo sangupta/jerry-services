@@ -21,7 +21,8 @@
 
 package com.sangupta.jerry.counter.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -39,7 +40,7 @@ import com.sangupta.jerry.util.AssertUtils;
  */
 public class MongoDBCounterServiceImpl implements CounterService {
 	
-	@Autowired
+	@Inject
 	private MongoTemplate mongoTemplate;
 
 	@Override

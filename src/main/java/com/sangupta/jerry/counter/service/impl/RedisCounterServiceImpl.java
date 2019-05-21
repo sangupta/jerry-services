@@ -21,7 +21,8 @@
 
 package com.sangupta.jerry.counter.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
+
 import org.springframework.data.redis.core.RedisTemplate;
 
 import com.sangupta.jerry.counter.service.CounterService;
@@ -35,7 +36,7 @@ import com.sangupta.jerry.util.AssertUtils;
  */
 public class RedisCounterServiceImpl implements CounterService {
 	
-	@Autowired
+	@Inject
 	private RedisTemplate<String, Long> redisTemplate;
 
 	@Override

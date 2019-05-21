@@ -21,15 +21,16 @@
 
 package com.sangupta.jerry.lock.service.impl;
 
-import com.sangupta.jerry.lock.service.LockService;
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import com.sangupta.jerry.ApplicationContext;
+import com.sangupta.jerry.lock.service.LockService;
 import com.sangupta.jerry.util.AssertUtils;
 import com.sangupta.jerry.util.StringUtils;
 
@@ -43,7 +44,7 @@ public class RedisLockServiceImpl implements LockService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(RedisLockServiceImpl.class);
 	
-	@Autowired
+	@Inject
 	private RedisTemplate<String, String> redisTemplate;
 
 	@Override

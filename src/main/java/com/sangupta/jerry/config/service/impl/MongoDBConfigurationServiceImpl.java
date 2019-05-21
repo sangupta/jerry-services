@@ -23,7 +23,8 @@ package com.sangupta.jerry.config.service.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
+
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import com.sangupta.jerry.config.domain.Configuration;
@@ -36,7 +37,7 @@ import com.sangupta.jerry.util.AssertUtils;
  */
 public class MongoDBConfigurationServiceImpl extends BaseConfigurationServiceImpl {
 	
-	@Autowired
+	@Inject
 	private MongoTemplate mongoTemplate;
 
 	@Override

@@ -21,19 +21,26 @@
 
 package com.sangupta.jerry.quartz.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import javax.inject.Inject;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.quartz.JobDetail;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobKey;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.Trigger;
+import org.quartz.impl.matchers.GroupMatcher;
+
 import com.sangupta.jerry.quartz.domain.QuartzJobInfo;
 import com.sangupta.jerry.quartz.domain.QuartzJobTriggerInfo;
 import com.sangupta.jerry.quartz.service.QuartzService;
 import com.sangupta.jerry.util.AssertUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.quartz.*;
-import org.quartz.impl.matchers.GroupMatcher;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Default implementation for the {@link QuartzService}.
@@ -44,7 +51,7 @@ public class DefaultQuartzServiceImpl implements QuartzService {
 
     private static final Log logger = LogFactory.getLog(DefaultQuartzServiceImpl.class);
 
-    @Autowired
+    @Inject
     private Scheduler scheduler;
 
     /**
