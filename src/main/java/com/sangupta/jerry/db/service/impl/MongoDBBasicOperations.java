@@ -23,11 +23,12 @@ package com.sangupta.jerry.db.service.impl;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
+import javax.inject.Inject;
+
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.mapping.context.MappingContext;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -37,6 +38,7 @@ import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
+import com.mongodb.client.result.DeleteResult;
 import com.sangupta.jerry.db.service.DatabaseBasicOperationsService;
 import com.sangupta.jerry.util.AssertUtils;
 
@@ -71,7 +73,7 @@ public abstract class MongoDBBasicOperations<T, X> implements DatabaseBasicOpera
 	
 	protected ConversionService conversionService = null;
 
-	@Autowired
+	@Inject
 	protected MongoTemplate mongoTemplate = null;
 	
 	protected Class<T> entityClass = null;
@@ -125,7 +127,7 @@ public abstract class MongoDBBasicOperations<T, X> implements DatabaseBasicOpera
 		}
 		
 		if(this.idKey == null) {
-			fetchMappingContextAndConversionService();
+			this.fetchMappingContextAndConversionService();
 		}
 		
 		Query query = new Query(Criteria.where(this.idKey).in(ids));
@@ -134,16 +136,7 @@ public abstract class MongoDBBasicOperations<T, X> implements DatabaseBasicOpera
 	
 	@Override
 	public List<T> getForIdentifiers(X... ids) {
-		if(AssertUtils.isEmpty(ids)) {
-			return null;
-		}
-		
-		if(this.idKey == null) {
-			fetchMappingContextAndConversionService();
-		}
-		
-		Query query = new Query(Criteria.where(this.idKey).in(ids));
-		return this.mongoTemplate.find(query, this.entityClass);
+		return this.getForIdentifiers(Arrays.asList(ids));
 	}
 	
 	@Override
@@ -222,20 +215,20 @@ public abstract class MongoDBBasicOperations<T, X> implements DatabaseBasicOpera
 	/**
 	 * Add or update an existing object in the data store.
 	 * 
-	 * @param object
+	 * @param entity
 	 *            the object to save
 	 * 
 	 * @return <code>true</code> if saved, <code>false</code> otherwise
 	 */
 	@Override
-	public boolean addOrUpdate(T object) {
-		if(object == null) {
+	public boolean addOrUpdate(T entity) {
+		if(entity == null) {
 			return false;
 		}
 		
-		X primaryID = getPrimaryID(object);
+		X primaryID = getPrimaryID(entity);
 		if(primaryID == null) {
-			this.mongoTemplate.save(object);
+			this.mongoTemplate.save(entity);
 			return true;
 		}
 		
@@ -243,7 +236,7 @@ public abstract class MongoDBBasicOperations<T, X> implements DatabaseBasicOpera
 			return false;
 		}
 		
-		this.mongoTemplate.save(object);
+		this.mongoTemplate.save(entity);
 		return true;
 	}
 	
@@ -256,18 +249,18 @@ public abstract class MongoDBBasicOperations<T, X> implements DatabaseBasicOpera
 	 * @return the record that was removed
 	 */
 	@Override
-	public T delete(X primaryID) {
+	public boolean delete(X primaryID) {
 		if(primaryID == null) {
-			return null;
+			return false;
 		}
 		
-		T entity = get(primaryID);
-		if(entity == null) {
-			return null;
+		Query query = new Query(Criteria.where(this.idKey).is(primaryID));
+		DeleteResult result = this.mongoTemplate.remove(query, this.entityClass);
+		if(result == null) {
+			return false;
 		}
 		
-		this.mongoTemplate.remove(entity);
-		return entity;
+		return result.getDeletedCount() == 1;
 	}
 	
 	/**
@@ -327,7 +320,7 @@ public abstract class MongoDBBasicOperations<T, X> implements DatabaseBasicOpera
 	/**
 	 * Get the basic services from mongo template
 	 */
-	private synchronized void fetchMappingContextAndConversionService() {
+	protected synchronized void fetchMappingContextAndConversionService() {
 		if(mappingContext == null) {
 			MongoConverter mongoConverter = this.mongoTemplate.getConverter();
 			mappingContext = mongoConverter.getMappingContext();
@@ -340,7 +333,7 @@ public abstract class MongoDBBasicOperations<T, X> implements DatabaseBasicOpera
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void inferEntityClassViaGenerics() {
+	protected void inferEntityClassViaGenerics() {
 		// fetch the entity class over which we will work
 		Type t = getClass().getGenericSuperclass();
 		if(t instanceof ParameterizedType) {
@@ -359,12 +352,4 @@ public abstract class MongoDBBasicOperations<T, X> implements DatabaseBasicOpera
 		return mongoTemplate;
 	}
 
-	/**
-	 * @param mongoTemplate the mongoTemplate to set
-	 */
-	@Required
-	public void setMongoTemplate(MongoTemplate mongoTemplate) {
-		this.mongoTemplate = mongoTemplate;
-	}
-	
 }
