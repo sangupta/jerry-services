@@ -19,7 +19,7 @@ import com.sangupta.jerry.util.AssertUtils;
  * @param <T>
  * @param <X>
  */
-public class InMemoryDataStoreServiceImpl<T, X> extends AbstractDataStoreServiceImpl<T, X> {
+public abstract class InMemoryDataStoreServiceImpl<T, X> extends AbstractDataStoreServiceImpl<T, X> {
 
     protected final Map<X, T> dataStore = new ConcurrentHashMap<>();
 
@@ -33,17 +33,40 @@ public class InMemoryDataStoreServiceImpl<T, X> extends AbstractDataStoreService
     }
 
     @Override
-    public boolean delete(X primaryID) {
+    public T delete(X primaryID) {
         if (AssertUtils.isEmpty(primaryID)) {
-            return false;
+            return null;
         }
 
-        T entity = this.dataStore.remove(primaryID);
-        if (entity != null) {
-            return true;
-        }
+        return this.dataStore.remove(primaryID);
+    }
 
-        return false;
+    @Override
+    public List<T> deleteMultiple(Collection<X> ids) {
+        if(AssertUtils.isEmpty(ids)) {
+            return null;
+        }
+        
+        List<T> list = new ArrayList<>();
+        for(X id : ids) {
+            list.add(this.delete(id));
+        }
+        
+        return list;
+    }
+
+    @Override
+    public List<T> deleteMultiple(X[] ids) {
+        if(AssertUtils.isEmpty(ids)) {
+            return null;
+        }
+        
+        List<T> list = new ArrayList<>();
+        for(X id : ids) {
+            list.add(this.delete(id));
+        }
+        
+        return list;
     }
 
     @Override
@@ -52,7 +75,11 @@ public class InMemoryDataStoreServiceImpl<T, X> extends AbstractDataStoreService
     }
 
     @Override
-    public List<T> getForIdentifiers(Collection<X> ids) {
+    public List<T> getMultiple(Collection<X> ids) {
+        if(AssertUtils.isEmpty(ids)) {
+            return null;
+        }
+        
         List<T> list = new ArrayList<>();
         for (X id : ids) {
             T entity = this.get(id);
@@ -65,7 +92,11 @@ public class InMemoryDataStoreServiceImpl<T, X> extends AbstractDataStoreService
     }
 
     @Override
-    public List<T> getForIdentifiers(X[] ids) {
+    public List<T> getMultiple(X[] ids) {
+        if(AssertUtils.isEmpty(ids)) {
+            return null;
+        }
+        
         List<T> list = new ArrayList<>();
         for (X id : ids) {
             T entity = this.get(id);
@@ -84,6 +115,14 @@ public class InMemoryDataStoreServiceImpl<T, X> extends AbstractDataStoreService
 
     @Override
     public List<T> getAll(int page, int pageSize) {
+        if(page <= 0) {
+            throw new IllegalArgumentException("Page number should start from 1");
+        }
+        
+        if(pageSize <= 0) {
+            throw new IllegalArgumentException("Page size should be greater than zero");
+        }
+        
         List<T> coll = new ArrayList<>(this.dataStore.values());
 
         int start = (page - 1) * pageSize;
@@ -91,7 +130,7 @@ public class InMemoryDataStoreServiceImpl<T, X> extends AbstractDataStoreService
         int size = coll.size();
 
         if (start >= size) {
-            return null;
+            return new ArrayList<>();
         }
 
         if (end > size) {

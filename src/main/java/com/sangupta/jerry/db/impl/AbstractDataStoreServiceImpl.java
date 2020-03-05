@@ -67,7 +67,7 @@ public abstract class AbstractDataStoreServiceImpl<T, X> implements DataStoreSer
         this.primaryIDClass = (Class<X>) actualTypeArguments[1];
 
         // figure out the primary field
-        Field[] fields = this.entityClass.getFields();
+        Field[] fields = this.entityClass.getDeclaredFields();
         if (AssertUtils.isEmpty(fields)) {
             LOGGER.warn("Entity class has no field defined: {}", this.entityClass);
             throw new IllegalArgumentException("Entity class has no field defined");
@@ -84,7 +84,9 @@ public abstract class AbstractDataStoreServiceImpl<T, X> implements DataStoreSer
         }
 
         if (primaryField == null) {
-            throw new IllegalArgumentException("Entity class has no field with @Id annotation");
+            this.primaryKeyField = null;
+            this.idKeyFieldName = null;
+            return;
         }
 
         this.primaryKeyField = primaryField;
@@ -101,7 +103,11 @@ public abstract class AbstractDataStoreServiceImpl<T, X> implements DataStoreSer
      * @return the primary ID 
      */
     protected X getPrimaryID(T entity) {
+        if(this.primaryKeyField == null) {
+            throw new IllegalStateException("This DataStore must either implement getPrimaryID() method, or add an @Id annotation to a field in the entity");
+        }
         try {
+            this.primaryKeyField.setAccessible(true);
             return this.primaryIDClass.cast(this.primaryKeyField.get(entity));
         } catch (IllegalArgumentException e) {
             throw e;

@@ -39,6 +39,41 @@ public abstract class MongoTemplateDataStoreServiceImpl<T, X> extends AbstractDa
     }
 
     @Override
+    public List<T> getMultiple(Collection<X> ids) {
+        if (AssertUtils.isEmpty(ids)) {
+            return null;
+        }
+
+        Query query = new Query(Criteria.where(this.idKeyFieldName).in(ids));
+        return this.mongoTemplate.find(query, this.entityClass);
+    }
+    
+    @Override
+    public List<T> getMultiple(X[] ids) {
+        if (AssertUtils.isEmpty(ids)) {
+            return null;
+        }
+
+        Query query = new Query(Criteria.where(this.idKeyFieldName).in(ids));
+        return this.mongoTemplate.find(query, this.entityClass);
+    }
+
+    @Override
+    public List<T> getAll() {
+        return this.mongoTemplate.findAll(this.entityClass);
+    }
+
+    @Override
+    public List<T> getAll(int page, int pageSize) {
+        Query query = new Query();
+        query.limit(pageSize);
+        if (page > 1) {
+            query.skip((page - 1) * pageSize);
+        }
+        return this.mongoTemplate.find(query, this.entityClass);
+    }
+
+    @Override
     public boolean insertEntity(T entity) {
         X primaryID = this.getPrimaryID(entity);
         if (primaryID != null) {
@@ -89,58 +124,18 @@ public abstract class MongoTemplateDataStoreServiceImpl<T, X> extends AbstractDa
     }
 
     @Override
-    public boolean delete(X primaryID) {
+    public T delete(X primaryID) {
         if (primaryID == null) {
-            return false;
+            return null;
         }
 
         Query query = new Query(Criteria.where(this.idKeyFieldName).is(primaryID));
-        DeleteResult result = this.mongoTemplate.remove(query, this.entityClass);
-        if (result == null) {
-            return false;
-        }
-
-        return result.getDeletedCount() == 1;
+        return this.mongoTemplate.findAndRemove(query, this.entityClass);
     }
 
     @Override
     public long count() {
         return this.mongoTemplate.count(new Query(), this.entityClass);
-    }
-
-    @Override
-    public List<T> getForIdentifiers(Collection<X> ids) {
-        if (AssertUtils.isEmpty(ids)) {
-            return null;
-        }
-
-        Query query = new Query(Criteria.where(this.idKeyFieldName).in(ids));
-        return this.mongoTemplate.find(query, this.entityClass);
-    }
-    
-    @Override
-    public List<T> getForIdentifiers(X[] ids) {
-        if (AssertUtils.isEmpty(ids)) {
-            return null;
-        }
-
-        Query query = new Query(Criteria.where(this.idKeyFieldName).in(ids));
-        return this.mongoTemplate.find(query, this.entityClass);
-    }
-
-    @Override
-    public List<T> getAll() {
-        return this.mongoTemplate.findAll(this.entityClass);
-    }
-
-    @Override
-    public List<T> getAll(int page, int pageSize) {
-        Query query = new Query();
-        query.limit(pageSize);
-        if (page > 1) {
-            query.skip((page - 1) * pageSize);
-        }
-        return this.mongoTemplate.find(query, this.entityClass);
     }
 
     @Override

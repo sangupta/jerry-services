@@ -28,6 +28,57 @@ public interface DataStoreService<T, X> {
     public T get(X primaryID);
 
     /**
+     * Retrieves a list of all entities in the datastore that match the list of
+     * given primary identifiers.
+     * 
+     * <b>Note:</b> If there are too many entity identifiers supplied, the code may
+     * go out of memory or may take too long to complete. This method should be used
+     * only by developer at discretion.
+     * 
+     * @param ids the primary key identifiers for which we need to fetch the
+     *            objects.
+     * 
+     * @return list of objects as fetched for the given identifiers.
+     * 
+     */
+    public List<T> getMultiple(Collection<X> ids);
+    
+    /**
+     * 
+     * @param ids
+     * @return
+     */
+    public List<T> getMultiple(X[] ids);
+
+    /**
+     * Retrieves a list of all entities in the datastore.
+     * 
+     * <b>Note:</b> If there are too many entities in the data store, the code may
+     * go out of memory or may take too long to complete. This method should be used
+     * only by developers at discretion.
+     * 
+     * It is recommended not to use this method in production instances. Rather, use
+     * the method {@link #getAll(int, int)}.
+     * 
+     * @return all the objects in the data store
+     * 
+     */
+    public List<T> getAll();
+
+    /**
+     * Retrieves a list of entities for the given page number with the give page
+     * size. The page numbering starts from 1.
+     * 
+     * @param page     the page for which the results are needed, 1-based
+     * 
+     * @param pageSize the page size to use
+     * 
+     * @return the list of all objects falling in that page
+     * 
+     */
+    public List<T> getAll(int page, int pageSize);
+    
+    /**
      * Insert a new entity object into the data store
      * 
      * @param entity the entity that needs to be saved
@@ -69,7 +120,11 @@ public interface DataStoreService<T, X> {
      *         otherwise
      * 
      */
-    public boolean delete(X primaryID);
+    public T delete(X primaryID);
+
+    public List<T> deleteMultiple(Collection<X> ids);
+    
+    public List<T> deleteMultiple(X[] ids);
 
     /**
      * Return the count of total objects in the data store
@@ -78,58 +133,7 @@ public interface DataStoreService<T, X> {
      * 
      */
     public long count();
-
-    /**
-     * Retrieves a list of all entities in the datastore that match the list of
-     * given primary identifiers.
-     * 
-     * <b>Note:</b> If there are too many entity identifiers supplied, the code may
-     * go out of memory or may take too long to complete. This method should be used
-     * only by developer at discretion.
-     * 
-     * @param ids the primary key identifiers for which we need to fetch the
-     *            objects.
-     * 
-     * @return list of objects as fetched for the given identifiers.
-     * 
-     */
-    public List<T> getForIdentifiers(Collection<X> ids);
     
-    /**
-     * 
-     * @param ids
-     * @return
-     */
-    public List<T> getForIdentifiers(X[] ids);
-
-    /**
-     * Retrieves a list of all entities in the datastore.
-     * 
-     * <b>Note:</b> If there are too many entities in the data store, the code may
-     * go out of memory or may take too long to complete. This method should be used
-     * only by developers at discretion.
-     * 
-     * It is recommended not to use this method in production instances. Rather, use
-     * the method {@link #getAll(int, int)}.
-     * 
-     * @return all the objects in the data store
-     * 
-     */
-    public List<T> getAll();
-
-    /**
-     * Retrieves a list of entities for the given page number with the give page
-     * size. The page numbering starts from 1.
-     * 
-     * @param page     the page for which the results are needed, 1-based
-     * 
-     * @param pageSize the page size to use
-     * 
-     * @return the list of all objects falling in that page
-     * 
-     */
-    public List<T> getAll(int page, int pageSize);
-
     /**
      * Clean the database of all entities in this collection.
      * 
