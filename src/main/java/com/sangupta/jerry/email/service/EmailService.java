@@ -28,14 +28,21 @@ import com.sangupta.jerry.email.domain.EmailAddress;
  * Service that abstracts out sending emails.
  * 
  * @author sangupta
- *
+ * 
+ * @since 1.0.0
  */
 public interface EmailService {
 	
 	public boolean sendEmail(String fromAddress, String toAddress, String subject, String text);
 	
 	public boolean sendEmail(EmailAddress fromAddress, EmailAddress toAddress, String subject, String text);
-	
+
+	/**
+	 * Send a fully generated email.
+	 * 
+	 * @param email
+	 * @return
+	 */
 	public boolean sendEmail(Email email);
 
 }
