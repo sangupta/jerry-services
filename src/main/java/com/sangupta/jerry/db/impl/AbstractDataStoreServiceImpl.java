@@ -167,7 +167,14 @@ public abstract class AbstractDataStoreServiceImpl<T, X> implements DataStoreSer
         }
         if (entity instanceof UserOwnedEntity) {
             UserOwnedEntity uoe = (UserOwnedEntity) entity;
-            uoe.setUserID(SecurityContext.getUserID());
+            String entityUserID = uoe.getUserID();
+            String currentUserID = SecurityContext.getUserID();
+            
+            if((entityUserID == null) || (entityUserID != null && entityUserID.equals(currentUserID))) {
+                uoe.setUserID(currentUserID);
+            } else {
+                throw new SecurityException("Entity is owned by a different user");
+            }
         }
 
         this.massageEntity(entity, isUpdateRequest);
