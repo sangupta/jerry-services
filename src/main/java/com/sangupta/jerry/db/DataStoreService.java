@@ -19,6 +19,17 @@ import java.util.List;
 public interface DataStoreService<T, X> {
 
     /**
+     * Return the primary ID for the given entity.
+     * 
+     * @param entity the entity for which primary ID is required
+     * 
+     * @return the value of primary ID for the entity.
+     * 
+     * @throws IllegalArgumentException if the entity is <code>null</code>
+     */
+    public X getPrimaryID(T entity);
+
+    /**
      * Retrieve the entity object with the given primary key.
      * 
      * @param primaryID the primary key for which to look for the object
@@ -42,7 +53,7 @@ public interface DataStoreService<T, X> {
      * 
      */
     public List<T> getMultiple(Collection<X> ids);
-    
+
     /**
      * 
      * @param ids
@@ -60,7 +71,9 @@ public interface DataStoreService<T, X> {
      * It is recommended not to use this method in production instances. Rather, use
      * the method {@link #getAll(int, int)}.
      * 
-     * @return all the objects in the data store
+     * @return all the objects in the data store. Never returns a <code>null</code>.
+     *         If there are no objects in the data store, it should return an empty
+     *         array list.
      * 
      */
     public List<T> getAll();
@@ -69,36 +82,41 @@ public interface DataStoreService<T, X> {
      * Retrieves a list of entities for the given page number with the give page
      * size. The page numbering starts from 1.
      * 
-     * @param page     the page for which the results are needed, 1-based
+     * @param page     the page for which the results are needed,
+     *                 <code>0</code>-based. If the value is less than zero, returns
+     *                 <code>null</code>
      * 
-     * @param pageSize the page size to use
+     * @param pageSize the page size to use. If the value is less than or equal to
+     *                 zero, returns <code>null</code>
      * 
      * @return the list of all objects falling in that page
      * 
      */
     public List<T> getAll(int page, int pageSize);
-    
+
     /**
      * Insert a new entity object into the data store
      * 
      * @param entity the entity that needs to be saved
      * 
-     * @return <code>true</code> if the value was saved, <code>false</code>
-     *         otherwise.
+     * @return the entity if it was inserted successfully, <code>null</code>
+     *         otherwise
      * 
+     * @throws IllegalArgumentException if the entity is <code>null</code>
      */
-    public boolean insert(T entity);
+    public T insert(T entity);
 
     /**
      * Update the entity object into the data store
      * 
      * @param entity the entity to be updated in the data store
      * 
-     * @return <code>true</code> if the entity was updated, <code>false</code>
-     *         otherwise.
+     * @return the entity if it was updated successfully, <code>null</code>
+     *         otherwise
      * 
+     * @throws IllegalArgumentException if the entity is <code>null</code>
      */
-    public boolean update(T entity);
+    public T update(T entity);
 
     /**
      * Add or update the entity object into the data store
@@ -106,10 +124,22 @@ public interface DataStoreService<T, X> {
      * @param entity the object that needs to be persisted or updated in the data
      *               store.
      * 
-     * @return <code>true</code> if the entity was saved, <code>false</code>
-     *         otherwise.
+     * @return the entity if it was upserted successfully, <code>null</code>
+     *         otherwise
      */
-    public boolean upsert(T entity);
+    public T upsert(T entity);
+
+    /**
+     * Delete the given entity from the data store.
+     * 
+     * @param entity the object to be removed
+     * 
+     * @return the entity if it was deleted successfully, <code>null</code>
+     *         otherwise
+     * 
+     * @throws IllegalArgumentException if the entity is <code>null</code>
+     */
+    public T delete(T entity);
 
     /**
      * Delete the data store entity with the given primary key
@@ -119,11 +149,30 @@ public interface DataStoreService<T, X> {
      * @return <code>true</code> if the entity was deleted, <code>false</code>
      *         otherwise
      * 
+     * @throws IllegalArgumentException if the entity is <code>null</code>
      */
-    public T delete(X primaryID);
+    public T deleteForID(X primaryID);
 
+    /**
+     * Delete entities from data store where entities are represented by given
+     * primary IDs.
+     * 
+     * @param ids primary IDs for which entities are to be removed
+     * 
+     * @return a list of all entities that were removed, <code>null</code> if no
+     *         entity was removed.
+     */
     public List<T> deleteMultiple(Collection<X> ids);
-    
+
+    /**
+     * Delete entities from data store where entities are represented by given
+     * primary IDs.
+     * 
+     * @param ids primary IDs for which entities are to be removed
+     * 
+     * @return a list of all entities that were removed, <code>null</code> if no
+     *         entity was removed.
+     */
     public List<T> deleteMultiple(X[] ids);
 
     /**
@@ -133,7 +182,7 @@ public interface DataStoreService<T, X> {
      * 
      */
     public long count();
-    
+
     /**
      * Clean the database of all entities in this collection.
      * 

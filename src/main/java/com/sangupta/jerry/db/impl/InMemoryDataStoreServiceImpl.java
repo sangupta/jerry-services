@@ -10,7 +10,8 @@ import com.sangupta.jerry.db.DataStoreService;
 import com.sangupta.jerry.util.AssertUtils;
 
 /**
- * An in-memory implementation (using {@link ConcurrentHashMap}) for {@link DataStoreService}.
+ * An in-memory implementation (using {@link ConcurrentHashMap}) for
+ * {@link DataStoreService}.
  * 
  * @author sangupta
  * 
@@ -24,48 +25,46 @@ public abstract class InMemoryDataStoreServiceImpl<T, X> extends AbstractDataSto
     protected final Map<X, T> dataStore = new ConcurrentHashMap<>();
 
     @Override
-    public T get(X primaryID) {
-        if (AssertUtils.isEmpty(primaryID)) {
-            return null;
-        }
-
+    protected T getEntity(X primaryID) {
         return this.dataStore.get(primaryID);
     }
 
     @Override
-    public T delete(X primaryID) {
-        if (AssertUtils.isEmpty(primaryID)) {
-            return null;
-        }
+    protected T deleteEntity(T entity) {
+        X id = this.getPrimaryID(entity);
+        return this.dataStore.remove(id);
+    }
 
+    @Override
+    public T deleteEntityForID(X primaryID) {
         return this.dataStore.remove(primaryID);
     }
 
     @Override
     public List<T> deleteMultiple(Collection<X> ids) {
-        if(AssertUtils.isEmpty(ids)) {
+        if (AssertUtils.isEmpty(ids)) {
             return null;
         }
-        
+
         List<T> list = new ArrayList<>();
-        for(X id : ids) {
-            list.add(this.delete(id));
+        for (X id : ids) {
+            list.add(this.deleteForID(id));
         }
-        
+
         return list;
     }
 
     @Override
     public List<T> deleteMultiple(X[] ids) {
-        if(AssertUtils.isEmpty(ids)) {
+        if (AssertUtils.isEmpty(ids)) {
             return null;
         }
-        
+
         List<T> list = new ArrayList<>();
-        for(X id : ids) {
-            list.add(this.delete(id));
+        for (X id : ids) {
+            list.add(this.deleteForID(id));
         }
-        
+
         return list;
     }
 
@@ -76,10 +75,10 @@ public abstract class InMemoryDataStoreServiceImpl<T, X> extends AbstractDataSto
 
     @Override
     public List<T> getMultiple(Collection<X> ids) {
-        if(AssertUtils.isEmpty(ids)) {
+        if (AssertUtils.isEmpty(ids)) {
             return null;
         }
-        
+
         List<T> list = new ArrayList<>();
         for (X id : ids) {
             T entity = this.get(id);
@@ -93,10 +92,10 @@ public abstract class InMemoryDataStoreServiceImpl<T, X> extends AbstractDataSto
 
     @Override
     public List<T> getMultiple(X[] ids) {
-        if(AssertUtils.isEmpty(ids)) {
+        if (AssertUtils.isEmpty(ids)) {
             return null;
         }
-        
+
         List<T> list = new ArrayList<>();
         for (X id : ids) {
             T entity = this.get(id);
@@ -109,23 +108,15 @@ public abstract class InMemoryDataStoreServiceImpl<T, X> extends AbstractDataSto
     }
 
     @Override
-    public List<T> getAll() {
+    protected List<T> getAllEntities() {
         return new ArrayList<>(this.dataStore.values());
     }
 
     @Override
-    public List<T> getAll(int page, int pageSize) {
-        if(page <= 0) {
-            throw new IllegalArgumentException("Page number should start from 1");
-        }
-        
-        if(pageSize <= 0) {
-            throw new IllegalArgumentException("Page size should be greater than zero");
-        }
-        
+    protected List<T> getAllEntities(int page, int pageSize) {
         List<T> coll = new ArrayList<>(this.dataStore.values());
 
-        int start = (page - 1) * pageSize;
+        int start = page * pageSize;
         int end = start + pageSize;
         int size = coll.size();
 
@@ -146,30 +137,33 @@ public abstract class InMemoryDataStoreServiceImpl<T, X> extends AbstractDataSto
     }
 
     @Override
-    protected boolean insertEntity(T entity) {
+    protected T insertEntity(T entity) {
         X id = this.getPrimaryID(entity);
         T old = this.dataStore.putIfAbsent(id, entity);
         if (old == null) {
-            return true;
+            return entity;
         }
 
-        return false;
+        return null;
     }
 
     @Override
-    protected boolean updateEntity(T entity) {
+    protected T updateEntity(T entity) {
         X id = this.getPrimaryID(entity);
-        T old = this.dataStore.replace(id, entity);
-        if(old == null) {
-            return false;
+        boolean exists = this.dataStore.containsKey(id);
+        if (!exists) {
+            return null;
         }
-        
-        return true;
+
+        this.dataStore.replace(id, entity);
+        return entity;
     }
 
     @Override
-    protected boolean upsertEntity(T entity) {
-        return false;
+    protected T upsertEntity(T entity) {
+        X id = this.getPrimaryID(entity);
+        this.dataStore.put(id, entity);
+        return entity;
     }
 
 }
