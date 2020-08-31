@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.sangupta.jerry.db.DataStoreOperation;
@@ -49,11 +50,20 @@ public abstract class AbstractDataStoreServiceImpl<T, X> implements DataStoreSer
 
     @SuppressWarnings("unchecked")
     protected AbstractDataStoreServiceImpl() {
-        // extract entity class and primary key class
-        Type t = getClass().getGenericSuperclass();
-        if (!(t instanceof ParameterizedType)) {
-            throw new IllegalArgumentException("Instance is not parameterized.");
-        }
+     // extract entity class and primary key class
+        Type t;
+        Class<?> tc = getClass();
+        do {
+            t = tc.getGenericSuperclass();
+            if (t instanceof ParameterizedType) {
+                break;
+            }
+            
+            if(!(t instanceof Class)) {
+                break;
+            }
+            tc = (Class<?>) t;
+        } while(true);
 
         Type[] actualTypeArguments = ((ParameterizedType) t).getActualTypeArguments();
         this.entityClass = (Class<T>) actualTypeArguments[0];
@@ -96,6 +106,24 @@ public abstract class AbstractDataStoreServiceImpl<T, X> implements DataStoreSer
         }
         
         return this.getEntity(primaryID);
+    }
+    
+    @Override
+    public final List<T> getMultiple(Collection<X> ids) {
+        if (AssertUtils.isEmpty(ids)) {
+            return null;
+        }
+        
+        return this.getMultipleEntities(ids);
+    }
+    
+    @Override
+    public List<T> getMultiple(X[] ids) {
+        if (AssertUtils.isEmpty(ids)) {
+            return null;
+        }
+        
+        return this.getMultipleEntities(ids);
     }
     
     @Override
@@ -184,6 +212,24 @@ public abstract class AbstractDataStoreServiceImpl<T, X> implements DataStoreSer
         }
 
         return this.deleteEntityForID(primaryID);
+    }
+    
+    @Override
+    public final List<T> deleteMultiple(Collection<X> ids) {
+        if (AssertUtils.isEmpty(ids)) {
+            return null;
+        }
+        
+        return this.deleteMultipleEntities(ids);
+    }
+
+    @Override
+    public final List<T> deleteMultiple(X[] ids) {
+        if (AssertUtils.isEmpty(ids)) {
+            return null;
+        }
+        
+        return this.deleteMultipleEntities(ids);
     }
 
     /**
@@ -298,4 +344,13 @@ public abstract class AbstractDataStoreServiceImpl<T, X> implements DataStoreSer
     protected abstract List<T> getAllEntities();
     
     protected abstract List<T> getAllEntities(int page, int pageSize);
+
+    protected abstract List<T> getMultipleEntities(Collection<X> ids);
+
+    protected abstract List<T> getMultipleEntities(X[] ids);
+
+    protected abstract List<T> deleteMultipleEntities(Collection<X> ids);
+
+    protected abstract List<T> deleteMultipleEntities(X[] ids);
+    
 }

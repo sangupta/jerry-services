@@ -11,14 +11,22 @@ import com.sangupta.jerry.util.AssertUtils;
 
 /**
  * An in-memory implementation (using {@link ConcurrentHashMap}) for
- * {@link DataStoreService}.
+ * {@link DataStoreService}. The implementation can be used as:
+ * 
+ * <pre>
+ * DataStoreService<MyEntity, String> service = new InMemoryDataStoreServiceImpl<MyEntity, String>() {};
+ * </pre>
+ * 
+ * Now service can be used for all CRUD operations on <code>MyEntity</code> object
+ * using <code>service</code>.
  * 
  * @author sangupta
  * 
  * @since 2.0.0
  *
- * @param <T>
- * @param <X>
+ * @param <T> The entity object type which is persisted in the datastore
+ * 
+ * @param <X> The primary ID key for this entity object
  */
 public abstract class InMemoryDataStoreServiceImpl<T, X> extends AbstractDataStoreServiceImpl<T, X> {
 
@@ -41,7 +49,7 @@ public abstract class InMemoryDataStoreServiceImpl<T, X> extends AbstractDataSto
     }
 
     @Override
-    public List<T> deleteMultiple(Collection<X> ids) {
+    protected List<T> deleteMultipleEntities(Collection<X> ids) {
         if (AssertUtils.isEmpty(ids)) {
             return null;
         }
@@ -55,7 +63,7 @@ public abstract class InMemoryDataStoreServiceImpl<T, X> extends AbstractDataSto
     }
 
     @Override
-    public List<T> deleteMultiple(X[] ids) {
+    protected List<T> deleteMultipleEntities(X[] ids) {
         if (AssertUtils.isEmpty(ids)) {
             return null;
         }
@@ -74,11 +82,7 @@ public abstract class InMemoryDataStoreServiceImpl<T, X> extends AbstractDataSto
     }
 
     @Override
-    public List<T> getMultiple(Collection<X> ids) {
-        if (AssertUtils.isEmpty(ids)) {
-            return null;
-        }
-
+    protected List<T> getMultipleEntities(Collection<X> ids) {
         List<T> list = new ArrayList<>();
         for (X id : ids) {
             T entity = this.get(id);
@@ -91,11 +95,7 @@ public abstract class InMemoryDataStoreServiceImpl<T, X> extends AbstractDataSto
     }
 
     @Override
-    public List<T> getMultiple(X[] ids) {
-        if (AssertUtils.isEmpty(ids)) {
-            return null;
-        }
-
+    protected List<T> getMultipleEntities(X[] ids) {
         List<T> list = new ArrayList<>();
         for (X id : ids) {
             T entity = this.get(id);

@@ -7,9 +7,7 @@ public class InMemoryDataStoreServiceImplTest extends AbstarctDataStoreServiceIm
 
     @Override
     protected DataStoreService<TestObject, String> getService() {
-        return new InMemoryDataStoreServiceImpl<TestObject, String>() {
-            
-        };
+        return new InMemoryDataStoreServiceImpl<TestObject, String>() {};
     }
 
 }
