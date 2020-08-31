@@ -113,13 +113,10 @@ public abstract class InMemoryDataStoreServiceImpl<T, X> extends AbstractDataSto
     }
 
     @Override
-    protected List<T> getAllEntities(int page, int pageSize) {
+    protected List<T> getAllEntities(int page, int pageSize, int start, int end) {
         List<T> coll = new ArrayList<>(this.dataStore.values());
 
-        int start = page * pageSize;
-        int end = start + pageSize;
         int size = coll.size();
-
         if (start >= size) {
             return new ArrayList<>();
         }

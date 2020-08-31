@@ -147,7 +147,10 @@ public abstract class AbstractDataStoreServiceImpl<T, X> implements DataStoreSer
             return null;
         }
         
-        List<T> entities = this.getAllEntities(page, pageSize);
+        int start = page * pageSize;
+        int end = start + pageSize;
+        
+        List<T> entities = this.getAllEntities(page, pageSize, start, end);
         
         if(entities == null) {
             entities = new ArrayList<>();
@@ -343,7 +346,7 @@ public abstract class AbstractDataStoreServiceImpl<T, X> implements DataStoreSer
 
     protected abstract List<T> getAllEntities();
     
-    protected abstract List<T> getAllEntities(int page, int pageSize);
+    protected abstract List<T> getAllEntities(int page, int pageSize, int start, int end);
 
     protected abstract List<T> getMultipleEntities(Collection<X> ids);
 

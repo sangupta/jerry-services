@@ -33,7 +33,7 @@ import com.sangupta.jerry.db.DataStoreService;
 public abstract class MongoTemplateDataStoreServiceImpl<T, X> extends AbstractDataStoreServiceImpl<T, X> {
     
     @Inject
-    protected MongoTemplate mongoTemplate;
+    public MongoTemplate mongoTemplate;
 
     @Override
     public long count() {
@@ -68,12 +68,8 @@ public abstract class MongoTemplateDataStoreServiceImpl<T, X> extends AbstractDa
     }
 
     @Override
-    protected List<T> getAllEntities(int page, int pageSize) {
-        Query query = new Query();
-        query.limit(pageSize);
-        if (page > 1) {
-            query.skip((page - 1) * pageSize);
-        }
+    protected List<T> getAllEntities(int page, int pageSize, int start, int end) {
+        Query query = new Query().skip(start).limit(pageSize);
         return this.mongoTemplate.find(query, this.entityClass);
     }
 
