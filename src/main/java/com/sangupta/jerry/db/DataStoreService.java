@@ -3,7 +3,18 @@ package com.sangupta.jerry.db;
 import java.util.Collection;
 import java.util.List;
 
+import com.sangupta.jerry.db.impl.AbstractDataStoreServiceImpl;
+
 /**
+ * Provides an interface to connect to various persistence/in-memory data stores
+ * like in-memory, MongoDB, Redis etc. It provides useful CRUD operation methods
+ * as well as the ability to massage entity objects, to update create/update
+ * time, check for security, provides read-only capabilities and more.
+ * 
+ * It is preferable to not directly implement this interface, but extends the
+ * {@link AbstractDataStoreServiceImpl} as it provides boiler plate code to roll
+ * out an implementation faster.
+ * 
  * This class borrows heavily from the earlier available
  * <code>DatabaseBasicOperationsService</code> available in the
  * https://github.com/sangupta/jerry-services project.
