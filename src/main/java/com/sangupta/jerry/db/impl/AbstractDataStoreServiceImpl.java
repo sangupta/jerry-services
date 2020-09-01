@@ -50,7 +50,7 @@ public abstract class AbstractDataStoreServiceImpl<T, X> implements DataStoreSer
 
     @SuppressWarnings("unchecked")
     protected AbstractDataStoreServiceImpl() {
-     // extract entity class and primary key class
+        // extract entity class and primary key class
         Type t;
         Class<?> tc = getClass();
         do {
@@ -58,12 +58,12 @@ public abstract class AbstractDataStoreServiceImpl<T, X> implements DataStoreSer
             if (t instanceof ParameterizedType) {
                 break;
             }
-            
-            if(!(t instanceof Class)) {
+
+            if (!(t instanceof Class)) {
                 break;
             }
             tc = (Class<?>) t;
-        } while(true);
+        } while (true);
 
         Type[] actualTypeArguments = ((ParameterizedType) t).getActualTypeArguments();
         this.entityClass = (Class<T>) actualTypeArguments[0];
@@ -98,64 +98,64 @@ public abstract class AbstractDataStoreServiceImpl<T, X> implements DataStoreSer
             throw new IllegalArgumentException("Unable to access primary key field", e);
         }
     }
-    
+
     @Override
     public final T get(X primaryID) {
         if (AssertUtils.isEmpty(primaryID)) {
             return null;
         }
-        
+
         return this.getEntity(primaryID);
     }
-    
+
     @Override
     public final List<T> getMultiple(Collection<X> ids) {
         if (AssertUtils.isEmpty(ids)) {
             return null;
         }
-        
+
         return this.getMultipleEntities(ids);
     }
-    
+
     @Override
     public List<T> getMultiple(X[] ids) {
         if (AssertUtils.isEmpty(ids)) {
             return null;
         }
-        
+
         return this.getMultipleEntities(ids);
     }
-    
+
     @Override
     public final List<T> getAll() {
         List<T> entities = this.getAllEntities();
-        
-        if(entities == null) {
+
+        if (entities == null) {
             entities = new ArrayList<>();
         }
-        
+
         return entities;
     }
-    
+
     @Override
     public final List<T> getAll(int page, int pageSize) {
-        if(page < 0) {
+        if (page < 0) {
             return null;
         }
-        
-        if(pageSize <= 0) {
+
+        if (pageSize <= 0) {
             return null;
         }
-        
+
         int start = page * pageSize;
         int end = start + pageSize;
-        
+
         List<T> entities = this.getAllEntities(page, pageSize, start, end);
-        
-        if(entities == null) {
+
+        if (entities == null) {
             entities = new ArrayList<>();
         }
-        
+
         return entities;
     }
 
@@ -216,13 +216,13 @@ public abstract class AbstractDataStoreServiceImpl<T, X> implements DataStoreSer
 
         return this.deleteEntityForID(primaryID);
     }
-    
+
     @Override
     public final List<T> deleteMultiple(Collection<X> ids) {
         if (AssertUtils.isEmpty(ids)) {
             return null;
         }
-        
+
         return this.deleteMultipleEntities(ids);
     }
 
@@ -231,7 +231,7 @@ public abstract class AbstractDataStoreServiceImpl<T, X> implements DataStoreSer
         if (AssertUtils.isEmpty(ids)) {
             return null;
         }
-        
+
         return this.deleteMultipleEntities(ids);
     }
 
@@ -293,10 +293,19 @@ public abstract class AbstractDataStoreServiceImpl<T, X> implements DataStoreSer
         // this method is left intentional for child classes
         // to override as needed
     }
-    
+
+    /**
+     * Default implementation to {@link #close()} method which does nothing. Most of
+     * the implementations will not need to override this method.
+     */
+    public void close() {
+
+    }
+
     /**
      * 
-     * @param primaryID the primary ID for which entity is required. Will never be <code>null</code>
+     * @param primaryID the primary ID for which entity is required. Will never be
+     *                  <code>null</code>
      * 
      * @return
      */
@@ -345,7 +354,7 @@ public abstract class AbstractDataStoreServiceImpl<T, X> implements DataStoreSer
     protected abstract T deleteEntityForID(X primaryID);
 
     protected abstract List<T> getAllEntities();
-    
+
     protected abstract List<T> getAllEntities(int page, int pageSize, int start, int end);
 
     protected abstract List<T> getMultipleEntities(Collection<X> ids);
@@ -355,5 +364,5 @@ public abstract class AbstractDataStoreServiceImpl<T, X> implements DataStoreSer
     protected abstract List<T> deleteMultipleEntities(Collection<X> ids);
 
     protected abstract List<T> deleteMultipleEntities(X[] ids);
-    
+
 }

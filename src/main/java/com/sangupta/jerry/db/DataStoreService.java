@@ -199,5 +199,10 @@ public interface DataStoreService<T, X> {
      * 
      */
     public void deleteAll();
+    
+    /**
+     * Close the database, if supported, by the underlying implementation.
+     */
+    public void close();
 
 }
