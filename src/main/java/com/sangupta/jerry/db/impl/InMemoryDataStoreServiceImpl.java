@@ -44,7 +44,7 @@ public abstract class InMemoryDataStoreServiceImpl<T, X> extends AbstractDataSto
     }
 
     @Override
-    public T deleteEntityForID(X primaryID) {
+    protected T deleteEntityForID(X primaryID) {
         return this.dataStore.remove(primaryID);
     }
 
