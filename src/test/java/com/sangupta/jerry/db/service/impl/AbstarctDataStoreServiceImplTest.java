@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,6 +34,11 @@ public abstract class AbstarctDataStoreServiceImplTest {
     @Before
     public void beforeEachTest() {
         this.service = this.getService();
+    }
+    
+    @After
+    public void afterEachTest() {
+        this.service.close();
     }
     
     @Test(expected = IllegalArgumentException.class)
