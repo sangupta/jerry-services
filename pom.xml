@@ -53,7 +53,7 @@
 
 		<maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
 		<build.timestamp>${maven.build.timestamp}</build.timestamp>
-		<build.number />
+		<build.number/>
 	</properties>
 
 	<prerequisites>
@@ -116,7 +116,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
-			<version>5.1.7.RELEASE</version>
+			<version>5.3.23</version>
 			<scope>provided</scope>
 		</dependency>
 
