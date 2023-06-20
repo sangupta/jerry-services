@@ -53,7 +53,7 @@
 
 		<maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
 		<build.timestamp>${maven.build.timestamp}</build.timestamp>
-		<build.number />
+		<build.number/>
 	</properties>
 
 	<prerequisites>
@@ -136,7 +136,7 @@
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-mongodb</artifactId>
-			<version>2.1.8.RELEASE</version>
+			<version>3.3.0</version>
 			<scope>provided</scope>
 		</dependency>
 
